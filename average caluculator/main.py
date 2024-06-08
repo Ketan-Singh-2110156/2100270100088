@@ -6,23 +6,18 @@ import os
 from dotenv import load_dotenv
 import logging
 
-# Load environment variables from a .env file
 load_dotenv()
 
 app = Flask(__name__)
-
-# Configuration
 EXTERNAL_API_URL = "https://api.example.com/numbers"
 TOKEN_TYPE = os.getenv("TOKEN_TYPE", "Bearer")
 ACCESS_TOKEN = os.getenv("ACCESS_TOKEN")
 WINDOW_SIZE = 10
 NUMBER_TYPES = {'p': 'prime', 'f': 'fibonacci', 'e': 'even', 'r': 'random'}
 
-# Initialize the sliding window and lock for thread safety
 window = []
 window_lock = threading.Lock()
 
-# Set up logging
 logging.basicConfig(level=logging.INFO)
 
 def fetch_numbers(number_type):
@@ -52,8 +47,6 @@ def get_numbers(number_id):
 
     with window_lock:
         window_prev_state = list(window)
-        
-        # Add unique numbers to the window
         for num in fetched_numbers:
             if num not in window:
                 if len(window) >= WINDOW_SIZE:
